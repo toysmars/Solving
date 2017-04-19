@@ -1,5 +1,7 @@
 // https://www.acmicpc.net/problem/11656
-// Category: string, suffix array, Manber myers
+// * string
+// * suffix array
+// * Manber myers
 
 #include <iostream>
 #include <vector>

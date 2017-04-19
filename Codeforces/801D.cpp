@@ -1,5 +1,7 @@
 // Codeforces 801 D
-// Category: Geometry vector distance
+// * geometry 
+// * vector 
+// * distance between line and point
 
 #include <cstdio>
 #include <cmath>

@@ -38,6 +38,9 @@ typedef vector<vector<Edge>> Graph;
 
 // Minimum Cost Maximum Flow
 // precondition: no negative cycle.
+// mcmf.solve(source, sink); // min cost max flow
+// mcmf.solve(source, sink, 0); // min cost flow
+// mcmf.solve(source, sink, goal_flow); // min cost flow with total_flow >= goal_flow if possible
 class MinCostMaxFlow {
   public:
     MinCostMaxFlow(size_t n) : g(n), n(n), pi(n), need_normalize(false), augmented(false), last_start(-1) {}
@@ -154,11 +157,11 @@ class MinCostMaxFlow {
         return make_pair(flow_augment, cost_augment * flow_augment);
     }
 
-    pair<cap_t, cost_t> solve(int s, int e, cap_t flow_limit = INF_CAP) {
+    pair<cap_t, cost_t> solve(int s, int e, cap_t min_flow_needed = INF_CAP) {
         cap_t total_flow = 0;
         cost_t total_cost = 0;
         while (true) {
-            auto res = augment(s, e, flow_limit - total_flow);
+            auto res = augment(s, e, min_flow_needed - total_flow);
             if (res.first <= 0) break;
             total_flow += res.first;
             total_cost += res.second;
@@ -193,10 +196,11 @@ int main() {
     for (int i = 0; i < n; ++i) {
         scanf("%s", A[i]);
     }
-    MinCostMaxFlow mcmf(n * m + 3);
-    int li = 0;
-    int ri = 0;
-    for (int i = 0; i < n; ++i) for (int j = 0; j < m; ++j) if ((i + j)%2) B[i][j] = li++; else B[i][j] = ri++;
+    MinCostMaxFlow mcmf(n * m + 2);
+    int source = n * m;
+    int sink = n * m + 1;
+    int idx = 0;
+    for (int i = 0; i < n; ++i) for (int j = 0; j < m; ++j) B[i][j] = idx++;
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < m; ++j) {
             if ((i + j) % 2) {
@@ -204,20 +208,14 @@ int main() {
                     int ny = i + dy[k];
                     int nx = j + dx[k];
                     if (ny < 0 || ny >= n || nx < 0 || nx >= m) continue;
-                    mcmf.addEdge(B[i][j], li + B[ny][nx], 1, -w(A[i][j], A[ny][nx]));
+                    mcmf.addEdge(B[i][j], B[ny][nx], 1, -w(A[i][j], A[ny][nx]));
                 }
+                mcmf.addEdge(source, B[i][j], 1, 0);
+            } else {
+                mcmf.addEdge(B[i][j], sink, 1, 0);
             }
         }
     }
-    for (int i = 0; i < li; ++i) {
-        mcmf.addEdge(n*m + 1, i, 1, 0);
-        mcmf.addEdge(i, n*m, 1, 0);
-    }
-    mcmf.addEdge(n*m, n*m+2, INF_CAP, 0);
-    for (int i = 0; i < ri; ++i) {
-        mcmf.addEdge(li + i, n*m+2, 1, 0);
-    }
-    printf("%d\n", -mcmf.solve(n*m+1, n*m+2).second);
+    printf("%d\n", -mcmf.solve(source, sink, 0).second);
     return 0;
 }
-

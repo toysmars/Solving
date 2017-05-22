@@ -157,11 +157,11 @@ class MinCostMaxFlow {
         return make_pair(flow_augment, cost_augment * flow_augment);
     }
 
-    pair<cap_t, cost_t> solve(int s, int e, cap_t min_flow_needed = INF_CAP) {
+    pair<cap_t, cost_t> solve(int s, int e, cap_t flow_goal = INF_CAP) {
         cap_t total_flow = 0;
         cost_t total_cost = 0;
         while (true) {
-            auto res = augment(s, e, min_flow_needed - total_flow);
+            auto res = augment(s, e, flow_goal - total_flow);
             if (res.first <= 0) break;
             total_flow += res.first;
             total_cost += res.second;

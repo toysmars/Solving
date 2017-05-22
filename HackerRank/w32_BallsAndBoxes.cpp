@@ -1,5 +1,4 @@
 // https://www.hackerrank.com/contests/w32/challenges/balls-and-boxes
-// Category
 // * minimum cost maximum flow
 // * maxflow
 // * mcmf
@@ -48,6 +47,9 @@ typedef vector<vector<Edge>> Graph;
 
 // Minimum Cost Maximum Flow
 // precondition: no negative cycle.
+// mcmf.solve(source, sink); // min cost max flow
+// mcmf.solve(source, sink, 0); // min cost flow
+// mcmf.solve(source, sink, goal_flow); // min cost flow with total_flow >= goal_flow if possible
 class MinCostMaxFlow {
   public:
     MinCostMaxFlow(size_t n) : g(n), n(n), pi(n), need_normalize(false), augmented(false), last_start(-1) {}
@@ -164,11 +166,11 @@ class MinCostMaxFlow {
         return make_pair(flow_augment, cost_augment * flow_augment);
     }
 
-    pair<cap_t, cost_t> solve(int s, int e, cap_t flow_limit = INF_CAP) {
+    pair<cap_t, cost_t> solve(int s, int e, cap_t flow_goal = INF_CAP) {
         cap_t total_flow = 0;
         cost_t total_cost = 0;
         while (true) {
-            auto res = augment(s, e, flow_limit - total_flow);
+            auto res = augment(s, e, flow_goal - total_flow);
             if (res.first <= 0) break;
             total_flow += res.first;
             total_cost += res.second;
@@ -202,16 +204,14 @@ int main() {
     V2 = M;
     V3 = N + 1;
     V = V1 + V2 + V3;
-    int zero = V;
-    int source = V + 1;
-    int sink = V + 2;
+    int source = V;
+    int sink = V + 1;
 
-    MinCostMaxFlow mcmf(V + 3);
+    MinCostMaxFlow mcmf(V + 2);
     for (int i = 0; i < N; ++i) {
         mcmf.addEdge(source, i, A[i], 0);
     }
     for (int i = 0; i < N; ++i) {
-        mcmf.addEdge(i, zero, INF, 0);
         for (int j = 0; j < M; ++j) {
             mcmf.addEdge(i, V1 + j, 1, -B[i][j]);
         }
@@ -228,11 +228,8 @@ int main() {
     for (int k = 1, p = 1; k <= N; ++k, p += 2) {
         mcmf.addEdge(V1 + V2 + k, sink, INF, p);
     }
-    mcmf.addEdge(zero, sink, INF, 0);
     
-    auto res = mcmf.solve(source, sink);
+    auto res = mcmf.solve(source, sink, 0);
     printf("%d\n", -res.second);
-    //fprintf(stderr, "%d %d %d\n", N, C[0], C[1]);
     return 0;
 }
-

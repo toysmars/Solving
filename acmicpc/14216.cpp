@@ -1,5 +1,5 @@
 // https://www.acmicpc.net/problem/14216
-// * bipatite min cost matching
+// * bipartite min cost matching
 // * mcmf
 
 #include <cstdio>

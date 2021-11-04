@@ -1,0 +1,56 @@
+// acmicpc 6549
+//
+// stack
+// greedy
+
+#include <cstdio>
+#include <stack>
+using namespace std;
+
+typedef long long i64;
+
+i64 area(stack<pair<int, int>>& st, int i, int h) {
+	i64 res = 0;
+	while (st.top().second > h) {
+		int p = st.top().first;
+		int x = st.top().second;
+		st.pop();
+		i64 left = st.top().first;
+		i64 right = i;
+		i64 area = x * (right - left - 1);
+		if (res < area) {
+			res = area;
+		}
+	}
+	st.push(make_pair(i, h));
+
+	return res;
+}
+
+int main() {
+	while (true) {
+		int n;
+		scanf("%d", &n);
+		if (n == 0) {
+			break;
+		}
+
+		i64 ans = 0;
+		stack<pair<int, int>> st;
+		st.push(make_pair(-1, 0));
+		for (int i = 0; i < n; ++i) {
+			int h;
+			scanf("%d", &h);
+			i64 res = area(st, i, h);
+			if (ans < res) {
+				ans = res;
+			}
+		}
+		i64 res = area(st, n, 0);
+		if (ans < res) {
+			ans = res;
+		}
+		printf("%lld\n", ans);
+	}
+	return 0;
+}

@@ -1,12 +1,14 @@
-// https://www.acmicpc.net/problem/10942
-// * palindrome
-// * manacher
+// acmicpc 10942
+//
+// manacher's algorithm
+// palindrome
 
-#include <vector>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
 
 // Manacher's algorithm
+// Retrusn the length of longest palindorme substring centered at each index.
+// The size of index space is 2 * v.size() + 1 (it includes the point between two characters)
 vector<int> manacher(const vector<int>& v)
 {
 	vector<int> s;

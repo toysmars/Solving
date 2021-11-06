@@ -7,7 +7,7 @@
 using namespace std;
 
 // Manacher's algorithm
-// Retrusn the length of longest palindorme substring centered at each index.
+// Returns the length of longest palindorme substring centered at each index.
 // The size of index space is 2 * v.size() + 1 (it includes the point between two characters)
 vector<int> manacher(const vector<int>& v)
 {

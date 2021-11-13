@@ -10,49 +10,51 @@ bool isColor[2001];
 bool isNick[2001];
 
 struct TrieNode {
-    bool complete;
-    map<char, TrieNode*> children;
+    bool complete = false;
+    map<char, int> childrenAt;
 };
 
 class Trie {
 public:
     Trie() {
-        root = new TrieNode;
+        nodes.push_back(TrieNode());
+        nodes.push_back(TrieNode());
     }
-    void add(const char s[]) {
-        TrieNode* curr = root;
+    void add(int root, const char s[]) {
+        int curr = root;
         for (int i = 0; s[i]; ++i) {
-            if (curr->children.find(s[i]) == curr->children.end())  {
-                curr->children[s[i]] = new TrieNode;
+            if (nodes[curr].childrenAt[s[i]] == 0) {
+                nodes[curr].childrenAt[s[i]] = nodes.size();
+                nodes.push_back(TrieNode());
             }
-            curr = curr->children[s[i]];
+            curr = nodes[curr].childrenAt[s[i]];
         }
-        curr->complete = true;
+        nodes[curr].complete = true;
     }
-    TrieNode *root;
+    vector<TrieNode> nodes;
 };
 
-bool isLegend(Trie& colorTrie, Trie& nickTrie, char name[]) {
+bool isLegend(Trie& trie, char name[]) {
     memset(isColor, 0, sizeof(isColor));
     memset(isNick, 0, sizeof(isNick));
-
     int len = strlen(name);
-    TrieNode* curr = colorTrie.root;
+
+    int curr = 0;
     for (int i = 0; i < len; ++i) {
-        if (curr->children.find(name[i]) == curr->children.end()) {
+        if (trie.nodes[curr].childrenAt[name[i] ] == 0) {
             break;
         }
-        curr = curr->children[name[i]];
-        isColor[i] = curr->complete;
+        curr = trie.nodes[curr].childrenAt[name[i] ];
+        isColor[i] = trie.nodes[curr].complete;
     }
 
-    curr = nickTrie.root;
+    curr = 1;
     for (int i = len - 1 ; i >= 0; --i) {
-        if (curr->children.find(name[i]) == curr->children.end()) {
+        if (trie.nodes[curr].childrenAt[name[i] ] == 0) {
             break;
         }
-        curr = curr->children[name[i]];
-        isNick[i] = curr->complete;
+        curr = trie.nodes[curr].childrenAt[name[i] ];
+        isNick[i] = trie.nodes[curr].complete;
     }
 
     for (int i = 0; i < len; ++i) {
@@ -67,23 +69,23 @@ bool isLegend(Trie& colorTrie, Trie& nickTrie, char name[]) {
 int main() {
     int C, N;
     scanf("%d%d", &C, &N);
-    Trie colorTrie;
+    Trie trie;
     for (int i = 0; i < C; ++i) {
         scanf("%s", name);
-        colorTrie.add(name);
+        trie.add(0, name);
     }
-    Trie nickTrie;
     for (int i = 0; i < N; ++i) {
         scanf("%s", name);
         int len = strlen(name);
         reverse(&name[0], &name[len]);
-        nickTrie.add(name);
+        trie.add(1, name);
     }
     int Q;
     scanf("%d", &Q);
     for (int i = 0; i < Q; ++i) {
         scanf("%s", name);
-        printf("%s\n", isLegend(colorTrie, nickTrie, name) ? "Yes" : "No");
+        printf("%s\n", isLegend(trie, name) ? "Yes" : "No");
     }
     return 0;
 }
+

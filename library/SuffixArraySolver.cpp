@@ -32,9 +32,7 @@ struct SuffixArraySolver {
             done = 1;
             nord[pos[0]] = 1;
             for (int i = 1; i < n; ++i) {
-                if (ord[pos[i - 1]] != ord[pos[i]] || ord[pos[i - 1] + h] != ord[pos[i] + h]) {
-                    done++;
-                }
+                done += (ord[pos[i - 1]] != ord[pos[i]] || ord[pos[i - 1] + h] != ord[pos[i] + h]);
                 nord[pos[i]] = done;
             }
             for (int i = 0; i < n; ++i) {

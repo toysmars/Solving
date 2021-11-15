@@ -3,7 +3,7 @@
 // suffix array
 // lcp
 // longest common prefix
-// longest common string
+// longest common substring
 
 #include <bits/stdc++.h>
 using namespace std;

@@ -2,7 +2,7 @@
 //
 // max flow min cost
 // mcmf
-// shortest path fast algorithm
+// shortest path faster algorithm
 
 #include <bits/stdc++.h>
 using namespace std;

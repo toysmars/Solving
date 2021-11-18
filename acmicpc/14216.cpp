@@ -1,6 +1,7 @@
 // https://www.acmicpc.net/problem/14216
-// * bipartite min cost matching
-// * mcmf
+//
+// complete bipartite assignment
+// hungarian
 
 #include <cstdio>
 #include <cstdlib>

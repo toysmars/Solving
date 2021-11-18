@@ -36,7 +36,7 @@ typedef vector<vector<Edge>> Graph;
 // precondition: no negative cycle.
 // mcmf.solve(source, sink); // min cost max flow
 // mcmf.solve(source, sink, 0); // min cost flow
-// mcmf.solve(source, sink, goal_flow); // min cost flow with total_flow <= goal_flow if possible
+// mcmf.solve(source, sink, goal_flow); // min cost flow with total_flow >= goal_flow if possible
 class MinCostMaxFlow {
   public:
     MinCostMaxFlow(size_t n) : g(n), n(n) {}

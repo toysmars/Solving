@@ -6,7 +6,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef int EdgeId;
+typedef int edge_id_t;
 
 struct Edge {
     int u;
@@ -20,26 +20,26 @@ struct Edge {
 
 class MaxFlow {
 public:
-    MaxFlow(int n, int source, int sink) : n(n), g(n), level(n), vptr(n), source(source), sink(sink), flow(0) {}
+    MaxFlow(int n) : n(n), flow(0), g(n), level(n), vptr(n) {}
 
     void addEdge(int u, int v, int cap) {
-        EdgeId uvId = edges.size();
+        edge_id_t uvId = edges.size();
         edges.push_back(Edge(u, v, cap));
         g[u].push_back(uvId);
 
-        EdgeId vuId = edges.size();
+        edge_id_t vuId = edges.size();
         edges.push_back(Edge(v, u, 0));
         g[v].push_back(vuId);
     }
 
-    int maximumFlow() {
-        while (findAugmentPath()) {
+    int maximumFlow(int source, int sink) {
+        while (findAugmentPath(source, sink)) {
             for (int u = 0; u < n; ++u) {
                 vptr[u] = g[u].size() - 1;
             }
             int sum = 0;
             while (true) {
-                int amount = augment(source, INT_MAX);
+                int amount = augment(source, INT_MAX, sink);
                 if (amount == 0) break;
                 sum += amount;
             }
@@ -50,7 +50,7 @@ public:
     }
 
 private:
-    bool findAugmentPath() {
+    bool findAugmentPath(int source, int sink) {
         fill(level.begin(), level.end(), -1);
         queue<int> q;
         q.push(sink);
@@ -72,7 +72,7 @@ private:
         return false;
     }
 
-    int augment(int u, int flow) {
+    int augment(int u, int flow, int sink) {
         if (u == sink) {
             return flow;
         }
@@ -81,7 +81,7 @@ private:
             int uvIdx = g[u][j];
             Edge& e = edges[uvIdx];
             if (e.residual() > 0 && level[e.v] == level[e.u] - 1) {
-                int amount = augment(e.v, min(flow, e.residual()));
+                int amount = augment(e.v, min(flow, e.residual()), sink);
                 if (amount > 0) {
                     edges[uvIdx].flow += amount;
                     edges[uvIdx^1].flow -= amount;
@@ -95,20 +95,18 @@ private:
 
   private:
     int n;
-    int source;
-    int sink;
     int flow;
-    vector<vector<EdgeId>> g;
-    vector<bool> visit;
-    vector<Edge> edges;
+    vector<vector<edge_id_t>> g;
     vector<int> level;
     vector<int> vptr;
+    vector<Edge> edges;
 };
+
 
 int main() {
     int V, E;
     scanf("%d%d", &V, &E);
-    MaxFlow mf(V+V+2, 3, 4);
+    MaxFlow mf(V+V+2);
     for (int u = 1; u <= V; ++u) {
         mf.addEdge(2*u, 2*u+1, 1);
     }
@@ -118,6 +116,7 @@ int main() {
         mf.addEdge(2*u+1, 2*v, 1);
         mf.addEdge(2*v+1, 2*u, 1);
     }
-    printf("%d\n", mf.maximumFlow());
+    printf("%d\n", mf.maximumFlow(3, 4));
     return 0;
 }
+

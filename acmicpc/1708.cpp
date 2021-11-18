@@ -35,7 +35,7 @@ vector<Point> convexHull(vector<Point>& p) {
     vector<Point> res;
     sort(p.begin(), p.end(), cmpX);
     CcwComparator ccwCmp = { p[0] };
-    sort(p.begin() + 1, p.end(), ccwCmp);
+    stable_sort(p.begin() + 1, p.end(), ccwCmp);
     res.push_back(p[0]);
     res.push_back(p[1]);
     for (int i = 2; i < p.size(); ++i) {

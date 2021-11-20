@@ -36,7 +36,7 @@ int ccw(Vec2D a, Vec2D b) {
 }
 
 coord_t ccw(Point2D p, Point2D a, Point2D b) {
-    return ccw(vec(p, a), vec(b, p));
+    return ccw(vec(p, a), vec(p, b));
 }
 
 bool cmpX(const Point2D& a, const Point2D& b) {
@@ -59,7 +59,7 @@ vector<Point2D> convexHull(vector<Point2D>& p) {
     res.push_back(p[1]);
     for (int i = 2; i < p.size(); ++i) {
         int size = res.size();
-        while (size >= 2 && ccw(p[i], res[size-2], res[size-1]) <= 0) {
+        while (size >= 2 && ccw(p[i], res[size-1], res[size-2]) >= 0) {
             res.pop_back();
             size--;
         }
@@ -80,8 +80,8 @@ pair<Point2D, Point2D> farthestPoints(vector<Point2D>& p) {
         int np1 = (p1 + 1) % n;
         int np2 = (p2 + 1) % n;
         int a = ccw(vec(h[p1], h[np1]), vec(h[p2], h[np2]));
-        if (a >= 0) p1 = np1;
-        if (a <= 0) p2 = np2;
+        if (a <= 0) p1 = np1;
+        if (a >= 0) p2 = np2;
         coord_t r = normSquare(vec(h[p1], h[p2]));
         if (maxR < r) {
             maxR = r;
@@ -91,3 +91,4 @@ pair<Point2D, Point2D> farthestPoints(vector<Point2D>& p) {
     }
     return make_pair(h[ans1], h[ans2]);
 }
+

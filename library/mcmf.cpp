@@ -1,3 +1,10 @@
+// min cost max flow
+// examples:
+//  https://www.acmicpc.net/problem/3640
+//  https://www.acmicpc.net/problem/11407
+//  https://www.acmicpc.net/problem/11408
+//  https://www.acmicpc.net/problem/11450
+
 #include <bits/stdc++.h>
 using namespace std;
 

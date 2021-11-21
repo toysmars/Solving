@@ -1,3 +1,8 @@
+// Fenwick tree
+// Examples:
+//  * https://www.acmicpc.net/problem/3563
+//  * https://www.acmicpc.net/problem/18227
+
 #include <bits/stdc++.h>
 using namespace std;
 

@@ -14,7 +14,7 @@ int mex(int x) {
     int b = x - 2;
     bool have[16] = {0};
     while (a <= b) {
-        // grunt numbe G(g) of game g = {a, b, c} is G(g) = G(a)^G(b)^G(c)
+        // grundy numbe G(g) of game g = {a, b, c} is G(g) = G(a)^G(b)^G(c)
         int g = dp[a] ^ dp[b];
         have[g] = true;
         a++;

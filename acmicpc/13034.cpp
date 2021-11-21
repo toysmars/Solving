@@ -2,7 +2,7 @@
 //
 // game theory
 // nim game
-// grunt number
+// grundy number
 // mex
 
 #include <bits/stdc++.h>

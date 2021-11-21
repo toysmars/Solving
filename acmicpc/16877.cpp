@@ -3,6 +3,7 @@
 // game theory
 // nim game
 // grundy number
+// mex
 
 #include <bits/stdc++.h>
 using namespace std;

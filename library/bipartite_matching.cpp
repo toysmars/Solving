@@ -2,9 +2,20 @@
 // 이분매칭
 // Examples:
 //  * https://www.acmicpc.net/problem/3295
+//  * https://www.acmicpc.net/problem/3683
 //  * https://www.acmicpc.net/problem/9295
 //  * https://www.acmicpc.net/problem/11014
 //  * https://www.acmicpc.net/problem/14216
+
+// For a graph G,
+// Let I(G) to be the number of independent set, and
+// Let C(G) to be the number of vertex cover, then
+//  |V| = I(G) + C(G)
+// Let's say that graph G is a bipartite graph,
+// Let M(G) to be the number of maximum mathcing, then
+//  C(G) = M(G), thus
+// |V| = I(G) + M(G), therefore
+// I(G) = |V| - M(G)
 
 #include <bits/stdc++.h>
 using namespace std;

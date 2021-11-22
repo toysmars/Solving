@@ -1,6 +1,8 @@
 // aho-corasick solver
 // Examples:
+//  * https://www.acmicpc.net/problem/2809
 //  * https://www.acmicpc.net/problem/9250
+//  * https://www.acmicpc.net/problem/10256
 
 #include <bits/stdc++.h>
 using namespace std;

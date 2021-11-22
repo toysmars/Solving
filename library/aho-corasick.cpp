@@ -12,24 +12,23 @@ typedef string val_t;
 typedef int trie_node_id_t;
 
 struct TrieNode {
-    TrieNode(trie_val_t val, trie_node_id_t parent) : val(val), parent(parent) {}
-    trie_val_t val;
-    trie_node_id_t parent;
+    int depth = 0;
     bool complete = false;
     trie_node_id_t suffix_link = 0;
+    trie_node_id_t output_link = 0;
     map<trie_val_t, int> children_at;
 };
 
 struct AhoCorasic {
     AhoCorasic() {
-        trie.push_back(TrieNode(0, -1));
+        trie.push_back({ 0 });
     }
     void insert(const val_t& pattern) {
         trie_node_id_t curr = 0;
         for (auto p: pattern) {
             if (trie[curr].children_at[p] == 0) {
                 trie[curr].children_at[p] = trie.size();
-                trie.push_back(TrieNode(p, curr));
+                trie.push_back({ trie[curr].depth + 1 });
             }
             curr = trie[curr].children_at[p];
         }
@@ -57,8 +56,10 @@ struct AhoCorasic {
                     }
                     trie[next].suffix_link = prev;
                 }
-                if (trie[trie[next].suffix_link].complete) {
+                int suffix = trie[next].suffix_link;
+                if (!trie[next].complete && trie[suffix].complete) {
                     trie[next].complete = true;
+                    trie[next].output_link = trie[suffix].output_link == 0 ? suffix : trie[suffix].output_link;
                 }
                 q.push(next);
             }
@@ -68,26 +69,16 @@ struct AhoCorasic {
     vector<pair<int, int>> findMatch(const val_t& text) {
         vector<pair<int, int>> ans;
         trie_node_id_t curr = 0;
-        int n = text.length();
         for (int i = 0; i < text.size(); ++i) {
             auto t = text[i];
             while (curr > 0 && trie[curr].children_at[t] == 0)
                 curr = trie[curr].suffix_link;
             curr = trie[curr].children_at[t];
             if (trie[curr].complete) {
-                ans.push_back({ curr, i });
+                trie_node_id_t output = trie[curr].output_link == 0 ? curr : trie[curr].output_link;
+                ans.push_back({ i - trie[output].depth + 1, i });
             }
         }
-        return ans;
-    }
-
-    val_t value_of(trie_node_id_t idx) {
-        val_t ans;
-        while (idx > 0) {
-            ans.push_back(trie[idx].val);
-            idx = trie[idx].parent;
-        }
-        reverse(ans.begin(), ans.end());
         return ans;
     }
 

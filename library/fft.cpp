@@ -1,6 +1,8 @@
 // FFT
 // Convolution
 // polynomial multiplication
+// Examples:
+//  * https://www.acmicpc.net/problem/1067
 
 #include <bits/stdc++.h>
 using namespace std;

@@ -3,6 +3,7 @@
 // polynomial multiplication
 // Examples:
 //  * https://www.acmicpc.net/problem/1067
+//  * https://www.acmicpc.net/problem/17134
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -79,7 +80,8 @@ struct FFT {
     vector<int> l;
 };
 
-struct FFTMultiplier {
+// h(m) = sigma (1 <= k <= n) f(k)g(n-k)
+struct FFTMultiplier {    
     vector<int> multiply(vector<int>& a, vector<int>& b) {
         int n = 1;
         int len = max(a.size(), b.size());

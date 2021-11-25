@@ -80,7 +80,7 @@ struct FFT {
     vector<int> l;
 };
 
-// (f*g)(m) = sigma (1 <= k <= n) f(k)g(n-k)
+// (f*g)(m) = sigma (1 <= k <= m) f(k)g(m-k)
 struct FFTMultiplier {    
     vector<int> multiply(vector<int>& a, vector<int>& b) {
         int n = 1;

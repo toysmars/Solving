@@ -17,7 +17,7 @@ typedef val_t (*RepeatOperator)(val_t, int);
 
 struct SegmentTree {
     SegmentTree() {}
-    SegmentTree(int n, BiOperator op, SetOperator sop, RepeatOperator rop) : n(n), t(4 * n + 1, DEFAULT), lz(4 * n + 1), op(op), sop(sop), rop(rop) {}
+    SegmentTree(int n, BiOperator op, SetOperator sop, RepeatOperator rop) : n(n), t(4 * n + 1, DEFAULT), lz(4 * n + 1, DEFAULT), op(op), sop(sop), rop(rop) {}
 
     // update the segment tree with value x for range [ul, ur)
     void update(int ul, int ur, val_t x) {
@@ -65,7 +65,7 @@ struct SegmentTree {
                 lz[idx * 2] = op(lz[idx * 2], lz[idx]);
                 lz[idx * 2 + 1] = op(lz[idx * 2 + 1], lz[idx]);
             }
-            lz[idx] = 0;
+            lz[idx] = DEFAULT;
         }
     }
 

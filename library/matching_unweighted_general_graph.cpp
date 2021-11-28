@@ -1,6 +1,7 @@
 // General unweighted graph maximum matching
 //
 // Examples:
+//  * https://www.acmicpc.net/problem/13447
 //  * https://www.acmicpc.net/problem/15737
 
 #include <bits/stdc++.h>
@@ -8,9 +9,10 @@ using namespace std;
 
 // Find maximum matching on a unweighted undirected graph.
 // Implementation based on https://blog.kyouko.moe/20?category=767011
+// The vertex number must be in range [1, n].
 // O(|V|^3)
 struct GraphMatchingSolver {
-    GraphMatchingSolver(int n): n(n), it(0), g(n), visit(n), parent(n), org(n), match(n), aux(n) {}
+    GraphMatchingSolver(int n): n(n), bid(0), g(n + 1), visit(n + 1), parent(n + 1), org(n + 1), match(n + 1), aux(n + 1) {}
 
     void addEdge(int u, int v) {
         g[u].push_back(v);
@@ -19,24 +21,20 @@ struct GraphMatchingSolver {
 
     int solve() {
         int ans = 0;
-        vector<int> v(n - 1);
-        // random initialization
-        iota(v.begin(), v.end(), 0);
-        shuffle(v.begin(), v.end(), mt19937(0x94949));
-        for (auto x: v) {
-            if (!match[x]) {
-                for (auto y: g[x]) {
-                    if (!match[y]) {
-                        match[x] = y,
-                        match[y] = x;
+        for(int u = 1; u <= n; u++) {
+            if (!match[u]) {
+                for (int v: g[u]) {
+                    if (!match[v]) {
+                        match[u] = v,
+                        match[v] = u;
                         ++ans;
                         break;
                     }
                 }
             }
         }
-        for(int i = 0; i < n; ++i) {
-            if (!match[i] && bfs(i)) {
+        for(int u = 1; u <= n; ++u) {
+            if (!match[u] && bfs(u)) {
                 ++ans;
             }
         }
@@ -62,10 +60,10 @@ struct GraphMatchingSolver {
                     }
                     q.push(match[v]);
                     visit[match[v]] = 0;
-                } else if(visit[v] == 0 && org[u] != org[v]) {
-                    int a = lca(org[u], org[v]);
-                    blossom(v, u, a, q);
-                    blossom(u, v, a, q);
+                } else if (visit[v] == 0 && org[u] != org[v]) {
+                    int b = lca(org[u], org[v]);
+                    blossom(v, u, b, q);
+                    blossom(u, v, b, q);
                 }
             }
         }
@@ -84,34 +82,34 @@ struct GraphMatchingSolver {
     }
 
     int lca(int u, int v) {
-        ++it;
+        ++bid;
         while (true) {
             if (u) {
-                if (aux[u] == it) {
+                if (aux[u] == bid) {
                     return u;
                 }
-                aux[u] = it;
-                v = org[parent[match[u]]];
+                aux[u] = bid;
+                u = org[parent[match[u]]];
             }
             swap(u, v);
         }
     }
 
-    void blossom(int u, int v, int a, queue<int>& q) {
-        while (org[u] != a) {
+    void blossom(int u, int v, int b, queue<int>& q) {
+        while (org[u] != b) {
             parent[u] = v;
             v = match[u];
             if (visit[v] == 1) {
                 q.push(v);
                 visit[v] = 0;
             }
-            org[u] = org[v] = a;
+            org[u] = org[v] = b;
             u = parent[v];
         }
     }
 
     int n;
-    int it;
+    int bid;
     vector<vector<int>> g;
     vector<int> visit;
     vector<int> parent;
@@ -119,3 +117,4 @@ struct GraphMatchingSolver {
     vector<int> match;
     vector<int> aux;
 };
+

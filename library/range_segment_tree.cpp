@@ -4,6 +4,7 @@
 // Examples:
 //  * https://www.acmicpc.net/problem/12844
 //  * https://www.acmicpc/net/problem/13925
+//  * https://www.acmicpc/net/problem/13510
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -16,6 +17,7 @@ typedef val_t (*SetOperator)(val_t, val_t);
 typedef val_t (*RepeatOperator)(val_t, int);
 
 struct SegmentTree {
+    SegmentTree() {}
     SegmentTree(int n, BiOperator op, SetOperator sop, RepeatOperator rop) : n(n), t(4 * n + 1, DEFAULT), lz(4 * n + 1), op(op), sop(sop), rop(rop) {}
 
     // update the segment tree with value x for range [ul, ur)
@@ -59,7 +61,7 @@ struct SegmentTree {
     void propagate(int idx, int l, int r) {
         if (lz[idx] != DEFAULT) {
             int len = r - l;
-            t[idx] = op(t[idx], rop(lz[idx], len));
+            t[idx] = sop(t[idx], rop(lz[idx], len));
             if (len > 1) {
                 lz[idx * 2] = op(lz[idx * 2], lz[idx]);
                 lz[idx * 2 + 1] = op(lz[idx * 2 + 1], lz[idx]);
@@ -79,7 +81,7 @@ struct SegmentTree {
     static val_t min_set(val_t a, val_t b) { return b; }
     static val_t min_repeat(val_t a, int r) { return a; }
 
-    static val_t max(val_t a, val_t b) { return a < b ? a : b; }
+    static val_t max(val_t a, val_t b) { return a > b ? a : b; }
     static val_t max_set(val_t a, val_t b) { return b; }
     static val_t max_repeat(val_t a, int r) { return a; }
 
@@ -91,3 +93,4 @@ struct SegmentTree {
     static val_t xor_set(val_t a, val_t b) { return a ^ b; }
     static val_t xor_repeat(val_t a, int r) { return (r & 1) ? a : 0; }
 };
+

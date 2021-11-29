@@ -139,7 +139,9 @@ double getMeetTime(Snail a, Snail b) {
     double pb = cross(b.p0, b.p1);
     double x = (pa * (b.p0.x - b.p1.x) - pb * (a.p0.x - a.p1.x)) / d;
     double y = (pa * (b.p0.y - b.p1.y) - pb * (a.p0.y - a.p1.y)) / d;
-    return hypot(x - a.p0.x, y - a.p0.y);
+    double ad = hypot(x - a.p0.x, y - a.p0.y);
+    double bd = hypot(x - b.p0.x, y - b.p0.y);
+    return ad + EPS >= bd ? ad : INF;
 }
 
 int main() {

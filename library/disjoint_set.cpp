@@ -1,5 +1,7 @@
-class DisjointSet {
-public:
+#include <bits/stdc++.h>
+using namespace std;
+
+struct DisjointSet {
     DisjointSet(int n) {
         for (int i = 0; i < n; ++i) {
             s.push_back(i);
@@ -26,7 +28,6 @@ public:
             r[sx] += 1;
         }
     }
-private:
     vector<int> s;
     vector<int> r;
 };

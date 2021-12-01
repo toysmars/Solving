@@ -1,8 +1,13 @@
+// Segment tree
+//
+// Example
+//  * https://www.acmicpc.net/problem/23744
+
 #include <bits/stdc++.h>
 using namespace std;
 
 typedef int val_t;
-const val_t DEFAULT = 1000000;
+const val_t DEFAULT = 0;
 
 struct SegmentTree {
     SegmentTree(int n, val_t (*op)(val_t, val_t)) : n(n), t(4 * n + 1, DEFAULT), op(op) {}
@@ -12,7 +17,7 @@ struct SegmentTree {
     }
     val_t update(int i, val_t x, int idx, int l, int r) {
         if (l > i || r <= i || l >= r) {
-            return DEFAULT;
+            return t[idx];
         }
         int len = r - l;
         if (len == 1) {
@@ -21,7 +26,7 @@ struct SegmentTree {
         }
         val_t res1 = update(i, x, idx * 2 + 0, l, l + len / 2);
         val_t res2 = update(i, x, idx * 2 + 1, l + len / 2, r);
-        t[idx] = op(t[idx], op(res1, res2));
+        t[idx] = op(res1, res2);
         return t[idx];
     }
     val_t query(int ql, int qr) {
@@ -41,7 +46,7 @@ struct SegmentTree {
     }
 
     static val_t min(val_t a, val_t b) { return a < b ? a : b; }
-    static val_t max(val_t a, val_t b) { return a < b ? a : b; }
+    static val_t max(val_t a, val_t b) { return a > b ? a : b; }
 
     int n;
     vector<val_t> t;

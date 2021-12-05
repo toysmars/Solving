@@ -17,7 +17,7 @@ struct Node {
 
 struct Operations {
     val_t (*combine)(val_t, val_t);
-    val_t (*set)(val_t, val_t);
+    val_t (*update)(val_t, val_t);
 };
 
 // Persistent Segment tree
@@ -61,7 +61,7 @@ struct PersistentSegmentTree {
         nodes.push_back(nodes[idx]);
         int len = r - l;
         if (len == 1) {
-            nodes[new_idx].x = ops.set(nodes[new_idx].x, x);
+            nodes[new_idx].x = ops.update(nodes[new_idx].x, x);
         } else {
             auto res1 = update(i, x, nodes[idx].lc, l, l + len / 2);
             auto res2 = update(i, x, nodes[idx].rc, l + len / 2, r);
@@ -136,3 +136,4 @@ int main() {
     }
     return 0;
 }
+

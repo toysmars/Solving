@@ -1,6 +1,7 @@
 // Segment tree
 //
 // Example
+//  * https://www.acmicpc.net/problem/10868
 //  * https://www.acmicpc.net/problem/23744
 
 #include <bits/stdc++.h>

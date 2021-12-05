@@ -18,7 +18,7 @@ struct Node {
 
 struct Operations {
     val_t (*combine)(val_t, val_t);
-    val_t (*set)(val_t, val_t);
+    val_t (*update)(val_t, val_t);
 };
 
 // Persistent Segment tree
@@ -62,7 +62,7 @@ struct PersistentSegmentTree {
         nodes.push_back(nodes[idx]);
         int len = r - l;
         if (len == 1) {
-            nodes[new_idx].x = ops.set(nodes[new_idx].x, x);
+            nodes[new_idx].x = ops.update(nodes[new_idx].x, x);
         } else {
             auto res1 = update(i, x, nodes[idx].lc, l, l + len / 2);
             auto res2 = update(i, x, nodes[idx].rc, l + len / 2, r);
@@ -102,38 +102,3 @@ struct PersistentSegmentTree {
     vector<Node> nodes;
     vector<int> root;
 };
-
-const int MAX_X = 100001;
-int main() {
-    int T;
-    scanf("%d", &T);
-    while (T--) {
-        int n, m;
-        scanf("%d%d", &n, &m);
-        PersistentSegmentTree pst(MAX_X, n, 0, { PersistentSegmentTree::sum, PersistentSegmentTree::sum }, vector<int>(MAX_X + 1));
-        vector<vector<int>> eggs(MAX_X + 1);
-        vector<int> root(MAX_X + 1);
-        for (int i = 0; i < n; ++i) {
-            int x, y;
-            scanf("%d%d", &x, &y);
-            x++; y++;
-            eggs[y].push_back(x);
-        }
-        root[0] = 0;
-        for (int y = 1; y <= MAX_X; ++y) {
-            for (int x: eggs[y]) {
-                root[y] = pst.update(x, 1);
-            }
-            root[y] = max(root[y], root[y - 1]);
-        }
-        long long ans = 0;
-        for (int i = 0; i < m; ++i) {
-            int l, r, b, t;
-            scanf("%d%d%d%d", &l, &r, &b, &t);
-            l++; r++; b++; t++;
-            ans += pst.query(root[t], l, r + 1) - pst.query(root[b - 1], l, r + 1);
-        }
-        printf("%lld\n", ans);
-    }
-    return 0;
-}

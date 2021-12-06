@@ -1,6 +1,9 @@
 // KMP
 // Knuth Morris Pratt
 // String matching
+//
+// Example
+// * https://www.acmicpc.net/problem/14959
 
 #include <bits/stdc++.h>
 using namespace std;

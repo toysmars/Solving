@@ -3,8 +3,8 @@
 // 
 // Examples:
 //  * https://www.acmicpc.net/problem/12844
-//  * https://www.acmicpc/net/problem/13925
-//  * https://www.acmicpc/net/problem/13510
+//  * https://www.acmicpc.net/problem/13925
+//  * https://www.acmicpc.net/problem/13510
 
 #include <bits/stdc++.h>
 using namespace std;

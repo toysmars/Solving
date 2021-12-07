@@ -3,6 +3,7 @@
 // strongly connected component
 //
 // Examples:
+// * https://www.acmicpc.net/problem/2519
 // * https://www.acmicpc.net/problem/11281
 // * https://www.acmicpc.net/problem/16367
 
@@ -146,3 +147,6 @@ void add(TwoSAT& twoSat, int u, bool isu, int v, bool isv) {
         else twoSat.NotUorNotV(u, v);
     }
 }
+
+// (A && B) || (B && C) || (C && A) == (A || B) && (B || C) && (C || A)
+// (A && !B) || (!A && B) == (!A || !B) && (A || B)

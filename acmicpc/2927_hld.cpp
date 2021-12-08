@@ -1,3 +1,10 @@
+// acmicpc 2927 남극탐험
+//
+// HLD
+// Segment Tree
+// Disjoint Set
+// Offline Query
+
 #include <bits/stdc++.h>
 using namespace std;
 

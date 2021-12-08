@@ -3,8 +3,9 @@
 // Segment tree
 //
 // Examples
-//  * https://www.acmicpc.net/problem/13510
-//  * https://www.acmicpc.net/problem/13309
+// * https://www.acmicpc.net/problem/2927
+// * https://www.acmicpc.net/problem/13510
+// * https://www.acmicpc.net/problem/13309
 
 #include <bits/stdc++.h>
 using namespace std;

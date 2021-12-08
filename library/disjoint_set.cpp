@@ -10,13 +10,13 @@ struct DisjointSet {
     }
     int find(int x) {
         if (s[x] != x) {
-            s[x] = findSet(s[x]);
+            s[x] = find(s[x]);
         }
         return s[x];
     }
     void join(int x, int y) {
-        int sx = findSet(x);
-        int sy = findSet(y);
+        int sx = find(x);
+        int sy = find(y);
         if (sx == sy) {
             return;
         }

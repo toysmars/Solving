@@ -14,13 +14,13 @@ typedef int val_t;
 
 struct Operators {
     val_t (*combine)(val_t, val_t);
-    val_t (*lazy_combine)(val_t, val_t);
     val_t (*update)(val_t, val_t);
+    val_t (*lazy_update)(val_t, val_t);
     val_t (*repeat)(val_t, int);
 };
 
 struct SegmentTree {
-    SegmentTree(int n, val_t init_val, val_t def_val, Operators ops) : n(n), init_val(init_val), def_val(def_val), t(4 * n + 1, init_val), lz(4 * n + 1, init_val), ops(ops) {}
+    SegmentTree(int n, val_t def_val, Operators ops) : n(n), def_val(def_val), t(4 * n + 1, 0), lz(4 * n + 1, 0), haslz(4 * n + 1, false), ops(ops) {}
 
     // update the segment tree with value x for range [ul, ur)
     void update(int ul, int ur, val_t x) {
@@ -33,6 +33,7 @@ struct SegmentTree {
         }
         if (ul <= l && r <= ur) {
             lz[idx] = x;
+            haslz[idx] = true;
             propagate(idx, l, r);
             return t[idx];
         }
@@ -61,22 +62,24 @@ struct SegmentTree {
     }
 
     void propagate(int idx, int l, int r) {
-        if (lz[idx] != init_val) {
+        if (haslz[idx]) {
             int len = r - l;
             t[idx] = ops.update(t[idx], ops.repeat(lz[idx], len));
             if (len > 1) {
-                lz[idx * 2] = ops.lazy_combine(lz[idx * 2], lz[idx]);
-                lz[idx * 2 + 1] = ops.lazy_combine(lz[idx * 2 + 1], lz[idx]);
+                lz[idx * 2] = ops.lazy_update(lz[idx * 2], lz[idx]);
+                haslz[idx * 2] = true;
+                lz[idx * 2 + 1] = ops.lazy_update(lz[idx * 2 + 1], lz[idx]);
+                haslz[idx * 2 + 1] = true;
             }
-            lz[idx] = init_val;
+            haslz[idx] = false;
         }
     }
 
     int n;
-    val_t init_val;
     val_t def_val;
     vector<val_t> t;
     vector<val_t> lz;
+    vector<bool> haslz;
     Operators ops;
 
     static val_t min(val_t a, val_t b) { return a < b ? a : b; }

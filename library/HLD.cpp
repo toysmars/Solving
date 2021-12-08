@@ -11,14 +11,15 @@ using namespace std;
 
 typedef int val_t;
 
-const val_t DEFAULT = 0;
-typedef val_t (*BiOperator)(val_t, val_t);
-typedef val_t (*SetOperator)(val_t, val_t);
-typedef val_t (*RepeatOperator)(val_t, int);
+struct Operators {
+    val_t (*combine)(val_t, val_t);
+    val_t (*update)(val_t, val_t);
+    val_t (*lazy_update)(val_t, val_t);
+    val_t (*repeat)(val_t, int);
+};
 
 struct SegmentTree {
-    SegmentTree() {}
-    SegmentTree(int n, BiOperator op, SetOperator sop, RepeatOperator rop) : n(n), t(4 * n + 1, DEFAULT), lz(4 * n + 1, DEFAULT), op(op), sop(sop), rop(rop) {}
+    SegmentTree(int n, val_t def_val, Operators ops) : n(n), def_val(def_val), t(4 * n + 1, 0), lz(4 * n + 1, 0), haslz(4 * n + 1, false), ops(ops) {}
 
     // update the segment tree with value x for range [ul, ur)
     void update(int ul, int ur, val_t x) {
@@ -31,13 +32,14 @@ struct SegmentTree {
         }
         if (ul <= l && r <= ur) {
             lz[idx] = x;
+            haslz[idx] = true;
             propagate(idx, l, r);
             return t[idx];
         }
         int len = r - l;
         val_t res1 = update(ul, ur, x, idx * 2 + 0, l, l + len / 2);
         val_t res2 = update(ul, ur, x, idx * 2 + 1, l + len / 2, r);
-        t[idx] = op(res1, res2);
+        t[idx] = ops.combine(res1, res2);
         return t[idx];
     }
 
@@ -47,7 +49,7 @@ struct SegmentTree {
     val_t query(int ql, int qr, int idx, int l, int r) {
         propagate(idx, l, r);
         if (l >= qr || r <= ql || l >= r) {
-            return DEFAULT;
+            return def_val;
         }
         if (ql <= l && r <= qr) {
             return t[idx];
@@ -55,44 +57,40 @@ struct SegmentTree {
         int len = r - l;
         val_t res1 = query(ql, qr, idx * 2 + 0, l, l + len / 2);
         val_t res2 = query(ql, qr, idx * 2 + 1, l + len / 2, r);
-        return op(res1, res2);
+        return ops.combine(res1, res2);
     }
 
     void propagate(int idx, int l, int r) {
-        if (lz[idx] != DEFAULT) {
+        if (haslz[idx]) {
             int len = r - l;
-            t[idx] = sop(t[idx], rop(lz[idx], len));
+            t[idx] = ops.update(t[idx], ops.repeat(lz[idx], len));
             if (len > 1) {
-                lz[idx * 2] = op(lz[idx * 2], lz[idx]);
-                lz[idx * 2 + 1] = op(lz[idx * 2 + 1], lz[idx]);
+                lz[idx * 2] = ops.lazy_update(lz[idx * 2], lz[idx]);
+                haslz[idx * 2] = true;
+                lz[idx * 2 + 1] = ops.lazy_update(lz[idx * 2 + 1], lz[idx]);
+                haslz[idx * 2 + 1] = true;
             }
-            lz[idx] = DEFAULT;
+            haslz[idx] = false;
         }
     }
 
     int n;
+    val_t def_val;
     vector<val_t> t;
     vector<val_t> lz;
-    BiOperator op;
-    SetOperator sop;
-    RepeatOperator rop;
+    vector<bool> haslz;
+    Operators ops;
 
     static val_t min(val_t a, val_t b) { return a < b ? a : b; }
-    static val_t min_set(val_t a, val_t b) { return b; }
-    static val_t min_repeat(val_t a, int r) { return a; }
-
     static val_t max(val_t a, val_t b) { return a > b ? a : b; }
-    static val_t max_set(val_t a, val_t b) { return b; }
-    static val_t max_repeat(val_t a, int r) { return a; }
-
     static val_t add(val_t a, val_t b) { return a + b; }
-    static val_t add_set(val_t a, val_t b) { return a + b; }
-    static val_t add_repeat(val_t a, int r) { return r * a; }
-
-    static val_t xor_bi(val_t a, val_t b) { return a ^ b; }
-    static val_t xor_set(val_t a, val_t b) { return a ^ b; }
+    static val_t xorop(val_t a, val_t b) { return a ^ b; }
+    static val_t assign(val_t a, val_t b) { return b; }
+    static val_t no_repeat(val_t a, int r) { return a; }
+    static val_t times_repeat(val_t a, int r) { return r * a; }
     static val_t xor_repeat(val_t a, int r) { return (r & 1) ? a : 0; }
 };
+
 
 // heavy-Light Decomposition solver
 // Tree node index must be in range [1, N].
@@ -105,13 +103,16 @@ struct HeavyLightDecomposition {
         g[v].push_back(u);
     }
 
-    void init(int root) {
-        dfs(root, 0, 1);
+    void init() {
         group_cnt = 0;
         fill(group.begin(), group.end(), 0);
         fill(gidx.begin(), gidx.end(), 0);
         ghead.resize(1);
         gsize.resize(1);
+    }
+
+    void build(int root) {
+        dfs(root, 0, 1);
         hld(root, 1);
     }
 
@@ -185,9 +186,10 @@ struct HeavyLightDecomposition {
 };
 
 struct HLDQuerier {
-    HLDQuerier(HeavyLightDecomposition* hld, BiOperator op, SetOperator sop, RepeatOperator rop): hld(hld), val(hld->n+1), gst(1), op(op) {
+    HLDQuerier(HeavyLightDecomposition* hld, val_t def_val, Operators ops): hld(hld), val(hld->n+1), gst(), ops(ops) {
+        gst.push_back(SegmentTree(0, def_val, ops));
         for (int gid = 1; gid <= hld->group_cnt; ++gid) {
-            gst.push_back(SegmentTree(hld->gsize[gid], op, sop, rop));
+            gst.push_back(SegmentTree(hld->gsize[gid], def_val, ops));
         }
     }
 
@@ -206,32 +208,32 @@ struct HLDQuerier {
             }
             gst[ug].update(hld->gidx[u], hld->gidx[v] + 1, x);
         } else {
-            gst[vg].update(0, hld->gidx[v] + 1, x);
+            gst[vg].update(1, hld->gidx[v] + 1, x);
             update(u, hld->parent[vh], x);
         }
     }
 
-    val_t query(int u, int v) {
+    val_t query(int u, int v, bool include_top_most = false) {
         int ug = hld->group[u];
         int uh = hld->ghead[ug];
         int vg = hld->group[v];
         int vh = hld->ghead[vg];
         if (hld->depth[uh] > hld->depth[vh]) {
-            return query(v, u);
+            return query(v, u, include_top_most);
         }
         if (ug == vg) {
             if (hld->depth[u] > hld->depth[v]) {
                 swap(u, v);
             }
-            return gst[ug].query(hld->gidx[u] + 1, hld->gidx[v] + 1);
+            return gst[ug].query(hld->gidx[u] + (include_top_most ? 0 : 1), hld->gidx[v] + 1);
         } else {
             val_t res = gst[vg].query(1, hld->gidx[v] + 1);
-            return op(res, query(u, hld->parent[vh]));
+            return ops.combine(res, query(u, hld->parent[vh], include_top_most));
         }
     }
 
     HeavyLightDecomposition* hld;
     vector<SegmentTree> gst;
     vector<val_t> val;
-    BiOperator op;
+    Operators ops;
 };

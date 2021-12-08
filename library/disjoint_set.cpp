@@ -8,13 +8,13 @@ struct DisjointSet {
             r.push_back(0);
         }
     }
-    int findSet(int x) {
+    int find(int x) {
         if (s[x] != x) {
             s[x] = findSet(s[x]);
         }
         return s[x];
     }
-    void unionSet(int x, int y) {
+    void join(int x, int y) {
         int sx = findSet(x);
         int sy = findSet(y);
         if (sx == sy) {

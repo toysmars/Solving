@@ -9,9 +9,6 @@ using namespace std;
 typedef long long i64;
 typedef i64 val_t;
 
-const int MAX_SIZE = 5000;
-int dp[MAX_SIZE+1][MAX_SIZE+1];
-
 // Knuth Optimization
 // Applicable when:
 // * C[a][c] + C[b][d] <= C[a][d] + C[b][c]

@@ -52,6 +52,18 @@ public:
         return flow;
     }
 
+    pair<vector<int>, vector<int>> mincut() {
+        pair<vector<int>, vector<int>> ans;
+        for (int u = 0; u < n; ++u) {
+            if (level[u] == -1) {
+                ans.first.push_back(u);
+            } else {
+                ans.second.push_back(u);
+            }
+        }
+        return ans;
+    }
+
 private:
     bool findAugmentPath(int source, int sink) {
         fill(level.begin(), level.end(), -1);
@@ -104,3 +116,4 @@ private:
     vector<int> vptr;
     vector<Edge> edges;
 };
+

@@ -1,10 +1,13 @@
 // max flow
+// mincut
 // dinic
+//
 // Examples:
-//  * https://www.acmicpc.net/problem/1420
-//  * https://www.acmicpc.net/problem/2316
-//  * https://www.acmicpc.net/problem/2367
-//  * https://www.acmicpc.net/problem/11377
+// * https://www.acmicpc.net/problem/1420
+// * https://www.acmicpc.net/problem/2316
+// * https://www.acmicpc.net/problem/2367
+// * https://www.acmicpc.net/problem/11377
+// * https://www.acmicpc.net/problem/13161
 
 #include <bits/stdc++.h>
 using namespace std;

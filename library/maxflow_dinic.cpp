@@ -8,6 +8,7 @@
 // * https://www.acmicpc.net/problem/2367
 // * https://www.acmicpc.net/problem/11377
 // * https://www.acmicpc.net/problem/13161
+// * https://www.acmicpc.net/problem/23822
 
 #include <bits/stdc++.h>
 using namespace std;

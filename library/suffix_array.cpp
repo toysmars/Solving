@@ -1,8 +1,20 @@
-// Suffix array solver
+// Suffix Array
+// LCP
+// Longest Common Prefix
+//
+// Examples:
+// * https://www.acmicpc.net/problem/13576
+
+#include <bits/stdc++.h>
+using namespace std;
+
 struct SuffixArraySolver {
     SuffixArraySolver(const string& str): str(str), pos(str.size()), rank(str.size()), lcp(str.size()) {}
 
-    void solve() {
+    // Builds suffix array of given string `str`.
+    // pos[i] is the index of string s.t. str[pos[i]...] is i_th suffix in lexicographical order.
+    // rank[i] is suffix rank of str[i..]
+    void Solve() {
         int n = str.size();
         vector<int> ord(n + 1);
         vector<int> nord(n + 1);
@@ -45,7 +57,10 @@ struct SuffixArraySolver {
         }
     }
 
-    void solveLCP() {
+    // Builds LCP array. This method must be called after `Solve()`.
+    // Longest Common Prefix is the longest prefix between two consecutive suffixes in the suffix array.
+    // lcp[i] (i >= 1) is the length of common prefix of i-1_th suffix and i_th suffex.
+    void SolveLCP() {
         int n = str.size();
         int len = 0;
         for (int i = 0; i < n; ++i) {
@@ -66,3 +81,4 @@ struct SuffixArraySolver {
     vector<int> lcp;
     string str;
 };
+

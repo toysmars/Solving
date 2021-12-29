@@ -3,6 +3,7 @@
 // 트리의 지름
 //
 // Examples
+// * https://www.acmicpc.net/problem/1167
 // * https://www.acmicpc.net/problem/8872
 
 #include <bits/stdc++.h>

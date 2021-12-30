@@ -9,18 +9,17 @@ using namespace std;
 
 typedef long long i64;
 
-typedef vector<i64> Vector;
-typedef vector<Vector> Matrix;
+typedef vector<vector<i64>> Matrix;
 
 Matrix identical(int n) {
-    Matrix I(n, Vector(n));
+    Matrix I(n, vector<i64>(n));
     for (int i = 0; i < n; ++i) I[i][i] = 1;
     return I;
 }
 
 Matrix matrix_mul(Matrix& a, Matrix& b, int mod) {
     int n = a.size();
-    Matrix r(n, Vector(n));
+    Matrix r(n, vector<i64>(n));
     for (int i = 0; i < a.size(); ++i) {
         for (int j = 0; j < a.size(); ++j) {
             for (int k = 0; k < a.size(); ++k) {

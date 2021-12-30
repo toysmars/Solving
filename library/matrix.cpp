@@ -1,3 +1,9 @@
+// Matrix multiplication and power
+// 행렬 거듭제곱
+//
+// Examples
+// * https://www.acmicpc.net/problem/11444
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -26,7 +32,7 @@ Matrix matrix_mul(Matrix& a, Matrix& b, int mod) {
     return r;
 }
 
-Matrix matrix_pow(Matrix& m, int p, int mod) {
+Matrix matrix_pow(Matrix& m, i64 p, int mod) {
     static Matrix I = identical(m.size());
     if (p == 0) return I;
     if (p == 1) return m;

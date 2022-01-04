@@ -3,6 +3,7 @@
 //
 // Examples:
 // https://www.acmicpc.net/problem/2252
+// https://www.acmicpc.net/problem/2623
 
 #include <bits/stdc++.h>
 using namespace std;

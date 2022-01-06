@@ -2,6 +2,9 @@
 // convex hull trick
 // convec hull optimization
 // 볼록 껍질 최적화
+//
+// Examples
+// * https://www.acmicpc.net/problem/13263
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -33,7 +36,7 @@ struct ConvexHullTrickSolver {
 
     ConvexHullTrickSolver(bool is_x_increasing = false) : is_x_increasing(is_x_increasing), curr_ls_idx(0) {}
 
-    coord_t add(LinearFunction f) {
+    coord_t Add(LinearFunction f) {
         coord_t x = MIN_X;
         while (st.size() > 0) {
             auto last_f = st.back().first;
@@ -46,7 +49,7 @@ struct ConvexHullTrickSolver {
         return x;
     }
 
-    coord_t query(coord_t x) {
+    coord_t Query(coord_t x) {
         if (is_x_increasing) {
             return linearSearchQuery(x);
         }

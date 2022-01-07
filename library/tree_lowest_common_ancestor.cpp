@@ -4,12 +4,13 @@
 // Examples:
 // * https://www.acmicpc.net/problem/1761
 // * https://www.acmicpc.net/problem/11438
+// * https://www.acmicpc.net/problem/17399
 
 #include<bits/stdc++.h>
 using namespace std;
 
-struct LowestCommonAncestor {
-    LowestCommonAncestor(int n) : n(n), exp(0), g(n+1), d(n+1), v(n+1) {
+struct LowestCommonAncestorSolver {
+    LowestCommonAncestorSolver(int n) : n(n), exp(0), g(n+1), d(n+1), v(n+1) {
         int tn = n;
         while (tn > 0) {
             exp += 1;
@@ -56,7 +57,30 @@ struct LowestCommonAncestor {
         return p[0][u];
     }
 
-  private:
+    int Distance(int u, int v) {
+        int lca = Lca(u, v);
+        if (lca == u) {
+            return d[v] - d[u];
+        } else if (lca == v) {
+            return d[u] - d[v];
+        } else {
+            return d[u] + d[v] - 2 * d[lca];
+        }
+    }
+
+    int KthParent(int u, int k) {
+        if (d[u] < k) return -1;
+        int texp = exp;
+        while (k > 0 && texp >= 0) {
+            if (k >= (1 << texp)) {
+                k -= (1 << texp);
+                u = p[texp][u];
+            }
+            texp--;
+        }
+        return u;
+    }
+
     void dfs(int u, int parent, int depth) {
         if (v[u]) return;
         v[u] = true;

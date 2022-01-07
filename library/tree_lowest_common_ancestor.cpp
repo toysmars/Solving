@@ -2,7 +2,8 @@
 // Lowest common ancestor
 //
 // Examples:
-// https://www.acmicpc.net/problem/11438
+// * https://www.acmicpc.net/problem/1761
+// * https://www.acmicpc.net/problem/11438
 
 #include<bits/stdc++.h>
 using namespace std;

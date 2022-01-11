@@ -2,6 +2,7 @@
 // 값 압축
 //
 // Examples:
+// https://www.acmicpc.net/problem/11932
 // https://www.acmicpc.net/problem/18870
 
 #include <bits/stdc++.h>

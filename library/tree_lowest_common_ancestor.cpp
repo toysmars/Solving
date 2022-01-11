@@ -3,8 +3,8 @@
 //
 // Examples:
 // * https://www.acmicpc.net/problem/1761
-// * https://www.acmicpc.net/problem/7527
 // * https://www.acmicpc.net/problem/11438
+// * https://www.acmicpc.net/problem/11932
 // * https://www.acmicpc.net/problem/15480
 // * https://www.acmicpc.net/problem/17399
 

@@ -1,3 +1,8 @@
+// HLD with subtree query
+//
+// Examples:
+// * https://www.acmicpc.net/problem/17429
+
 #include <bits/stdc++.h>
 using namespace std;
 

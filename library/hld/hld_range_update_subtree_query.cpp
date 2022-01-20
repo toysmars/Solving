@@ -179,13 +179,13 @@ struct HeavyLightDecomposition {
 struct HLDQuerier {
     HLDQuerier(HeavyLightDecomposition* hld, val_t def_val, Operators ops): hld(hld), st(hld->n+1, def_val, ops), ops(ops)  {}
 
-    void Update(int u, int v, val_t x) {
+    void PathUpdate(int u, int v, val_t x) {
         int ug = hld->group[u];
         int uh = hld->ghead[ug];
         int vg = hld->group[v];
         int vh = hld->ghead[vg];
         if (hld->depth[uh] > hld->depth[vh]) {
-            Update(v, u, x);
+            PathUpdate(v, u, x);
             return;
         }
         if (ug == vg) {
@@ -195,17 +195,17 @@ struct HLDQuerier {
             st.Update(hld->dis[u], hld->dis[v] + 1, x);
         } else {
             st.Update(hld->dis[vh], hld->dis[v] + 1, x);
-            Update(u, hld->parent[vh], x);
+            PathUpdate(u, hld->parent[vh], x);
         }
     }
 
-    val_t Query(int u, int v, bool include_top_most = false) {
+    val_t PathQuery(int u, int v, bool include_top_most = false) {
         int ug = hld->group[u];
         int uh = hld->ghead[ug];
         int vg = hld->group[v];
         int vh = hld->ghead[vg];
         if (hld->depth[uh] > hld->depth[vh]) {
-            return Query(v, u, include_top_most);
+            return PathQuery(v, u, include_top_most);
         }
         if (ug == vg) {
             if (hld->depth[u] > hld->depth[v]) {
@@ -214,8 +214,16 @@ struct HLDQuerier {
             return st.Query(hld->dis[u] + (include_top_most ? 0 : 1), hld->dis[v] + 1);
         } else {
             val_t res = st.Query(hld->dis[vh], hld->dis[v] + 1);
-            return ops.combine(res, Query(u, hld->parent[vh], include_top_most));
+            return ops.combine(res, PathQuery(u, hld->parent[vh], include_top_most));
         }
+    }
+
+    void SubTreeUpdate(int r, val_t x) {
+        st.Update(hld->dis[r], hld->fin[r] + 1, x);
+    }
+
+    val_t SubTreeQuery(int r, bool include_top_most = false) {
+        return st.Query(hld->dis[r] + (include_top_most ? 0 : 1), hld->fin[r] + 1);
     }
 
     HeavyLightDecomposition* hld;

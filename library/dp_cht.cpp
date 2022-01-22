@@ -4,6 +4,7 @@
 // 볼록 껍질 최적화
 //
 // Examples
+// * https://www.acmicpc.net/problem/6171
 // * https://www.acmicpc.net/problem/13263
 
 #include <bits/stdc++.h>

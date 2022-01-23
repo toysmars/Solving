@@ -16,6 +16,9 @@ i64 cost(int a, int b);
 // Solves dynamic programing with recurrence
 //  dp[i][j] = min { dp[i-1][k] + C[k][j] } (0 <= k < j, 1 <= i <= n, 1 <= j <= m)
 //  where C[a][b] is a monge array.
+// Time complexity
+// * naive: O(nm^2)
+// * dnc: O(nm log m)
 struct DivideAndConquerDPSolver {
     DivideAndConquerDPSolver(int n, int m): n(n), m(m), dpp(m+1), dpc(m+1) {}
 

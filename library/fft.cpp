@@ -3,8 +3,9 @@
 // polynomial multiplication
 // Examples:
 //  * https://www.acmicpc.net/problem/1067
-//  * https://www.acmicpc.net/problem/17134
+//  * https://www.acmicpc.net/problem/10531
 //  * https://www.acmicpc.net/problem/13575
+//  * https://www.acmicpc.net/problem/17134
 
 #include <bits/stdc++.h>
 using namespace std;

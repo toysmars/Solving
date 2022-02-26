@@ -72,6 +72,7 @@ struct SegmentTree {
                 haslz[idx * 2 + 1] = true;
             }
             haslz[idx] = false;
+            lz[idx] = 0;
         }
     }
 

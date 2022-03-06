@@ -4,6 +4,7 @@
 
 // Examples:
 // * https://www.acmicpc.net/problem/13323
+// * https://www.acmicpc.net/problem/13324
 
 #include <bits/stdc++.h>
 using namespace std;

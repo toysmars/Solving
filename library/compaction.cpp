@@ -17,7 +17,7 @@ vector<val_t> compaction(const vector<val_t>& arr) {
         p[i] = make_pair(arr[i], i);
     }
     sort(p.begin(), p.end());
-    vector<int> ans(n);
+    vector<val_t> ans(n);
     ans[p[0].second] = 0;
     for (int i = 1, j = 0; i < n; ++i) {
         j += p[i].first != p[i-1].first;
